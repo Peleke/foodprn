@@ -1,0 +1,16 @@
+body {
+	font-family: 'Lato', sans-serif;
+	background-image: url("../images/food_background.jpg");
+	background-size: cover;
+
+}
+
+
+.nav {
+	align-items: center;
+}
+
+.display-3 {
+	font-weight: black;
+	text-align: center;
+}
