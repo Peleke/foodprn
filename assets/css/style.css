@@ -1,0 +1,24 @@
+body {
+	font-family: 'Corben', cursive;
+	background-image: url("../images/food_background.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+
+}
+
+.jumbotron {
+	font-weight: black;
+	text-align: center;
+
+}
+
+#burgerImg {
+	height: 40px;
+	width: 40px;
+}
+
+.navbar {
+	margin-top: 40px;
+	margin-left: 400px;
+}
+
