@@ -1,6 +1,4 @@
 $('#btn').on("click", function(event){
-  const city = // grab city from input
-  const state = // grab stae from input
   doAjax(config, city, state);
   // do your state/ui updates herej
 
@@ -9,6 +7,8 @@ $('#btn').on("click", function(event){
 })
 
 // ===
+const city =$("#city").val().trim(); // grab city from input
+const state = $("#state").val().trim();// grab stae from input
 
 // config.json
 
@@ -52,8 +52,8 @@ function doAjax(config, city, state, success = console.log, fail = console.error
 
 // 1. map response into data your app needs
 // HINTS
-map
-{
-  venueName: 'Name',
-  photos: [...]
-}
+// map
+// {
+//   venueName: 'Name',
+//   photos: [...]
+// }
