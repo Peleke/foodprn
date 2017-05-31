@@ -12,18 +12,6 @@ $(document).ready(function () {
     // 2. Dump that into a <pre></pre> tag on the page w/ JSON.stringify(mappedData, null, 4)
 
 
-    //1. build object
-    const objWeWant ={
-      name: 'Venue',
-      photos: []
-    }
-    // 2. rebuild object w/ map response into data your app needs
-    // HINTS
-    // map
-    // {
-    //   venueName: 'Name',
-    //   photos: [...]
-    // }
 
   })
 
@@ -40,7 +28,8 @@ $(document).ready(function () {
     client_id: 'KONYCKSGRS3NQ0BFNXGXPAIDMG0BF40ZC2ABKJCV5MLDJZOI',
     client_secret: 'RT1K2JJJGKRPOVCAT30JK45TVCVO11ZUTWKJNOT0PBVV0244',
     format: 'foursquare',
-    version: '20170101'
+    version: '20170101',
+    venuePhotos: 1
   };
 
   // ajaxHelpers.js
@@ -55,16 +44,15 @@ $(document).ready(function () {
 
   function buildUrl(config, city, state) {
     // Destructuring
-    const { base_url, endpoint, functionality, client_id, client_secret, format, version } = config
+    const { base_url, endpoint, functionality, client_id, client_secret, format, version, venuePhotos } = config
     const location = buildLocation(city, state);
 
-    return `${base_url}/${endpoint}/${functionality}?client_id=${client_id}&client_secret=${client_secret}&v=${version}&m=${format}&near=${location}`
+    return `${base_url}/${endpoint}/${functionality}?client_id=${client_id}&client_secret=${client_secret}&v=${version}&m=${format}&near=${location}&venuePhotos=${venuePhotos}/`
   }
 
-  function doAjax(config, city, state, success = console.log, fail = console.error) {
+  function doAjax(config, city, state) {
     const url = buildUrl(config, city, state);
-    // This is console logging url not the results fromt the url search.
-      fetch(url).then(response => console.log(response.json())).catch(fail);
+    return fetch(url)
   };
 
   function buildInfo(){
@@ -75,7 +63,39 @@ $(document).ready(function () {
   };
   // ===
 
+  //1. build object
+  const objWeWant ={
+    name: 'Venue',
+    photos: []
+  }
+  // 2. rebuild object w/ map response into data your app needs
+  // HINTS
+  // map
+  // {
+  //   venueName: 'Name',
+  //   photos: [...]
+  // }
 
+  // 0. venue ids :: take response -> [venueIds]
+  function getVenueIds (data) {
+    console.log(data.response)
+    const venueWrapperList = data.response.groups[0].items
+    return venueWrapperList
+             .map(venueWrapper => venueWrapper.venue)
+             .map(venue => venue.id)
+  }
+
+  // 1. Build functions to rquest photos for a venue
+  function requestPhotos(venueId) {
+
+  }
+
+  function buildPhotoUrl (venueId) {
+    const { base_url, endpoint, client_id, client_secret, version} = config
+    return `${base_url}/${endpoint}/${venueId}/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`
+  }
+
+  // 2. Use map to turn list of venue ids into a list of urls to request
 
 
 });
