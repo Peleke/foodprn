@@ -6,9 +6,25 @@ $(document).ready(function () {
     const city =$("#city").val().trim(); // grab city from input
     const state = $("#state").val().trim();// grab stae from input
     doAjax(config, city, state);
+
     // do your state/ui updates herej
 
     // 2. Dump that into a <pre></pre> tag on the page w/ JSON.stringify(mappedData, null, 4)
+
+
+    //1. build object
+    const objWeWant ={
+      name: 'Venue',
+      photos: []
+    }
+    // 2. rebuild object w/ map response into data your app needs
+    // HINTS
+    // map
+    // {
+    //   venueName: 'Name',
+    //   photos: [...]
+    // }
+
   })
 
   // ===
@@ -47,25 +63,19 @@ $(document).ready(function () {
 
   function doAjax(config, city, state, success = console.log, fail = console.error) {
     const url = buildUrl(config, city, state);
+    // This is console logging url not the results fromt the url search.
+      fetch(url).then(response => console.log(response.json())).catch(fail);
+  };
 
-    console.log(fetch(url).then(success).catch(fail));
-  }
-
+  function buildInfo(){
+      // dynamically create divs after hitting search
+      $("input[type=submit]").click(function(){
+        $("<li />").html("item").appendTo(".results");
+      })
+  };
   // ===
 
 
 
-  //1. build object
-  const objWeWant ={
-    name: 'Venue',
-    photos: []
-  }
-  // 2. rebuild object w/ map response into data your app needs
-  // HINTS
-  // map
-  // {
-  //   venueName: 'Name',
-  //   photos: [...]
-  // }
 
-})
+});
