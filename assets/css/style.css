@@ -1,24 +1,134 @@
-body {
-	font-family: 'Corben', cursive;
-	background-image: url("../images/food_background.jpg");
-	background-size: cover;
-	background-repeat: no-repeat;
-
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #f5f5f5;
 }
 
-.jumbotron {
-	font-weight: black;
-	text-align: center;
-
+.display-3 {
+  font-family: 'Corben', cursive;
+  color: wheat;
+  text-align: center;
 }
 
 #burgerImg {
-	height: 40px;
-	width: 40px;
+  height: 40px;
+  width: 40px;
 }
 
 .navbar {
-	margin-top: 40px;
-	margin-left: 400px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.navbar-default.transparent {
+  background-color: transparent;
+}
+.slide1, .slide2, .slide3 {
+  min-height: 560px; /* Must have a height or min-height set due to use of background images */
+  background-size: cover;
+  background-position: center center;
+}
+.slide1 {
+  background-image: url(./assets/images/pancakes.jpg);
+}
+.slide2 {
+  background-image: url(./assets/images/pasta.jpg);
+}
+.slide3 {
+  background-image: url(./assets/images/sandwich.jpg);
+}
+/* Carousel Fade Effect */
+.carousel.carousel-fade .item {
+  -webkit-transition: opacity 1s linear;
+  -moz-transition: opacity 1s linear;
+  -ms-transition: opacity 1s linear;
+  -o-transition: opacity 1s linear;
+  transition: opacity 1s linear;
+  opacity: .5;
+}
+.carousel.carousel-fade .active.item {
+  opacity: 1;
+}
+.carousel.carousel-fade .active.left,
+.carousel.carousel-fade .active.right {
+  left: 0;
+  z-index: 2;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+/* Carousel Overlay */
+.carousel-overlay {
+  position: absolute;
+  bottom: 100px;
+  right: 0;
+  left: 0;
 }
 
+/****************************/
+/*                          */
+/*Styles below just for Demo*/
+/*                          */
+/****************************/
+.navbar-default .navbar-brand {
+  color: rgba(0,180,0,1);      
+}
+.navbar-default .navbar-brand:hover {
+  color: rgba(0,180,0,1);      
+}
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+    color: #fff;
+    background-color: rgba(0,180,0,.5);
+    
+}
+.navbar-default .navbar-nav>li>a {
+  color: #fff;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px rgba(0,0,0,.75);
+  border-radius: 4px;
+    padding: 10px 15px;
+    margin: 5px 0px;
+}
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus {
+    color: #fff;
+    background-color: rgba(0,180,0,.25);
+}
+.navbar-collapse.in {
+    background-color: rgba(255,255,255,.5);
+}
+.navbar-default .navbar-toggle {
+  border-color: transparent;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+    background-color: rgba(0,180,0,.5);
+}
+.navbar-toggle {
+    padding: 9px 10px;
+    margin-top: 8px;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    color: #fff;
+}
+.carousel-overlay {
+  font-family: 'Corben', cursive;
+  color: tomato;
+  text-shadow: 2px 2px 2px rgba(0,0,0,1);
+}
+.carousel-overlay h1 {
+    font-size: 3.5em;
+}
+
+
+/*.carousel-overlay .btn {
+  border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 4px solid #398439;
+    border-radius: 6px;
+}
+.carousel-overlay .btn-lg {
+    font-size: 1.75em;
+    padding: 10px 30px;
+}*/
