@@ -32,13 +32,13 @@ footer {
   background-position: center center;
 }
 .slide1 {
-  background-image: url(./assets/images/pancakes.jpg);
+  background-image: url(../images/pancakes.jpg);
 }
 .slide2 {
-  background-image: url(./assets/images/pasta.jpg);
+  background-image: url(../images/pasta.jpg);
 }
 .slide3 {
-  background-image: url(./assets/images/sandwich.jpg);
+  background-image: url(../images/sandwich.jpg);
 }
 /* Carousel Fade Effect */
 .carousel.carousel-fade .item {
