@@ -86,7 +86,7 @@ $(document).ready(function () {
   }
 
   // 1. Build functions to rquest photos for a venue
-  function requestPhotos(venueId) {
+  function requestPhotos(url) {
 
   }
 
@@ -96,6 +96,10 @@ $(document).ready(function () {
   }
 
   // 2. Use map to turn list of venue ids into a list of urls to request
-
+  venueIds.map(builPhotoUrl).map(url => fetch(url)).map(promise => {
+    // pluco ff photo information
+    // get photo urls
+    // build HTML
+  })
 
 });
