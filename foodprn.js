@@ -19,14 +19,13 @@ $(document).ready(function () {
 
 
   // config.json
-
   // const & let
   const config = {
     base_url: 'https://api.foursquare.com/v2',
     endpoint: 'venues',
     functionality: 'explore',
     client_id: 'KONYCKSGRS3NQ0BFNXGXPAIDMG0BF40ZC2ABKJCV5MLDJZOI',
-    client_secret: 'RT1K2JJJGKRPOVCAT30JK45TVCVO11ZUTWKJNOT0PBVV0244',
+    client_secret: 'HJUZKDVMTBS30E3CH31HMCYWYIS4CIVTK25BGUQVKWLB2LPI',
     format: 'foursquare',
     version: '20170101',
     venuePhotos: 1
@@ -37,17 +36,22 @@ $(document).ready(function () {
   function buildLocation (city, state) {
     city = encodeURIComponent(city);
     state = encodeURIComponent(state);
-
     // Template Strings
     return `${city},${state}`;
   }
 
-  function buildUrl(config, city, state) {
-    // Destructuring
-    const { base_url, endpoint, functionality, client_id, client_secret, format, version, venuePhotos } = config
-    const location = buildLocation(city, state);
+  // function buildUrl(config, city, state) {
+  //   // Destructuring
+  //   const { base_url, endpoint, functionality, client_id, client_secret, format, version, venuePhotos } = config
+  //   const location = buildLocation(city, state);
+  //
+  //   return `${base_url}/${endpoint}/${functionality}?near=${location}&client_id=${client_id}&client_secret=${client_secret}&v=${version}&m=${format}&venuePhotos=${venuePhotos}/`
+  // }
 
-    return `${base_url}/${endpoint}/${functionality}?client_id=${client_id}&client_secret=${client_secret}&v=${version}&m=${format}&near=${location}&venuePhotos=${venuePhotos}/`
+  function buildUrl(config, city, state) {
+  const {base_url, endpoint, functionality, client_id, client_secret, version, venuePhotos} = config
+  const location = buildLocation(city, state)
+  return `${base_url}/${endpoint}/${functionality}?near=${location}&client_id=${client_id}&client_secret=${client_secret}&v=${version}&venuePhotos=${venuePhotos}`
   }
 
   function doAjax(config, city, state) {
@@ -55,8 +59,9 @@ $(document).ready(function () {
     return fetch(url)
   };
 
+// dynamically create divs after hitting search
   function buildInfo(){
-      // dynamically create divs after hitting search
+
       $("input[type=submit]").click(function(){
         $("<li />").html("item").appendTo(".results");
       })
@@ -68,13 +73,7 @@ $(document).ready(function () {
     name: 'Venue',
     photos: []
   }
-  // 2. rebuild object w/ map response into data your app needs
-  // HINTS
-  // map
-  // {
-  //   venueName: 'Name',
-  //   photos: [...]
-  // }
+
 
   // 0. venue ids :: take response -> [venueIds]
   function getVenueIds (data) {
@@ -85,21 +84,20 @@ $(document).ready(function () {
              .map(venue => venue.id)
   }
 
-  // 1. Build functions to rquest photos for a venue
+  // 1. Build functions to request photos for a venue
   function requestPhotos(url) {
-
+    // 2. Use map to turn list of venue ids into a list of urls to request
+    venueIds.map(builPhotoUrl).map(url => fetch(url)).map(promise => {
+      // pluck off photo information
+      // get photo urls
+      // build HTML
+    })
   }
 
   function buildPhotoUrl (venueId) {
-    const { base_url, endpoint, client_id, client_secret, version} = config
+    const { base_url, endpoint, client_id, client_secret, version, venueId = getVenueIds()} = config
     return `${base_url}/${endpoint}/${venueId}/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`
   }
 
-  // 2. Use map to turn list of venue ids into a list of urls to request
-  venueIds.map(builPhotoUrl).map(url => fetch(url)).map(promise => {
-    // pluco ff photo information
-    // get photo urls
-    // build HTML
-  })
 
 });
