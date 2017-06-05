@@ -1,14 +1,14 @@
 $(document).ready(function () {
 
   $('#submit-search').on("click", function(event){
-    event.preventDefault();
+    // event.preventDefault();
 
     const city =$("#city").val().trim(); // grab city from input
     const state = $("#state").val().trim();// grab stae from input
     doAjax(config, city, state);
 
     // do your state/ui updates herej
-
+    $(".wellDivContainer").append()
     // 2. Dump that into a <pre></pre> tag on the page w/ JSON.stringify(mappedData, null, 4)
 
 
@@ -16,18 +16,7 @@ $(document).ready(function () {
   })
 
   // ===
-  // dynamically create divs after hitting search
-    function buildInfo(){
 
-        $("input[type=submit]").click(function(){
-          $("<li />").html("item").appendTo(".results");
-        })
-    };
-    //1. build object
-    const objWeWant ={
-      name: 'Venue',
-      photos: []
-    }
   // create a config object that holds all 'permanent' information
   const config = {
     base_url: 'https://api.foursquare.com/v2',
@@ -56,6 +45,8 @@ $(document).ready(function () {
   const location = buildLocation(city, state)
   return `${base_url}/${endpoint}/${functionality}?near=${location}&client_id=${client_id}&client_secret=${client_secret}&v=${version}&venuePhotos=${venuePhotos}`
   }
+
+
   // API call using 'fetch'
   // calls buildUrl function and grabs returned URL
   function doAjax(config, city, state) {
@@ -65,7 +56,8 @@ $(document).ready(function () {
     });
   };
   // ===
-
+  //store JSON object response in a variable
+  var data = doAjax(config, city, state);
 
   // get venue name
   function getVenueNames (data) {
@@ -83,10 +75,6 @@ $(document).ready(function () {
              .map(venue => venue.rating)
   }
 
-
-  //store JSON object response in a variable
-  var data = doAjax(config, city, state);
-
   // 0. venue ids :: take response -> [venueIds]
   // get venue ID
   function getVenueIds (data) {
@@ -96,16 +84,13 @@ $(document).ready(function () {
              .map(venueWrapper => venueWrapper.venue)
              .map(venue => venue.id)
   }
-
-
-
-
+  //store JSON object response in a variable
   var venueId = getVenueIds(data)
 
   function buildPhotoUrl (venueId) {
     const {base_url, endpoint, client_id, client_secret, version} = config
     return photoURL = venueId
-              .map(urls => `${base_url}/${endpoint}/${venueId}/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`)
+              .map(urls => `${base_url}/${endpoint}/'+venueId +'/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`)
   }
 
   // API call #2
@@ -121,7 +106,11 @@ $(document).ready(function () {
 
   }
 
-
+  //build array of objects
+  const objWeWant ={
+    name: 'Venue',
+    photos: []
+  }
 
 
 });
