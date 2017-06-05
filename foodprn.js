@@ -16,66 +16,79 @@ $(document).ready(function () {
   })
 
   // ===
+  // dynamically create divs after hitting search
+    function buildInfo(){
 
-
-  // config.json
-  // const & let
+        $("input[type=submit]").click(function(){
+          $("<li />").html("item").appendTo(".results");
+        })
+    };
+    //1. build object
+    const objWeWant ={
+      name: 'Venue',
+      photos: []
+    }
+  // create a config object that holds all 'permanent' information
   const config = {
     base_url: 'https://api.foursquare.com/v2',
     endpoint: 'venues',
     functionality: 'explore',
-    client_id: 'KONYCKSGRS3NQ0BFNXGXPAIDMG0BF40ZC2ABKJCV5MLDJZOI',
-    client_secret: 'HJUZKDVMTBS30E3CH31HMCYWYIS4CIVTK25BGUQVKWLB2LPI',
+    client_id: 'CVPNGFU3BS4QLSNJUYEITIUAXWU3BLCE3B3GZ30NBAPRQMS2',
+    client_secret: 'RA4WQVHK330LFHQRYFSEO1C0M5KJONNZQ1XJFX0QXIIKBSIK',
     format: 'foursquare',
     version: '20170101',
     venuePhotos: 1
   };
 
-  // ajaxHelpers.js
 
+  // API Call #1
+  // use encodeURIComponent to 'encode city and state and return result'
   function buildLocation (city, state) {
     city = encodeURIComponent(city);
     state = encodeURIComponent(state);
     // Template Strings
     return `${city},${state}`;
   }
-
-  // function buildUrl(config, city, state) {
-  //   // Destructuring
-  //   const { base_url, endpoint, functionality, client_id, client_secret, format, version, venuePhotos } = config
-  //   const location = buildLocation(city, state);
-  //
-  //   return `${base_url}/${endpoint}/${functionality}?near=${location}&client_id=${client_id}&client_secret=${client_secret}&v=${version}&m=${format}&venuePhotos=${venuePhotos}/`
-  // }
-
+  // calls buildLocation function and grabs returned result
+  // creates the full URL used to make the API call
   function buildUrl(config, city, state) {
   const {base_url, endpoint, functionality, client_id, client_secret, version, venuePhotos} = config
   const location = buildLocation(city, state)
   return `${base_url}/${endpoint}/${functionality}?near=${location}&client_id=${client_id}&client_secret=${client_secret}&v=${version}&venuePhotos=${venuePhotos}`
   }
-
+  // API call using 'fetch'
+  // calls buildUrl function and grabs returned URL
   function doAjax(config, city, state) {
-    const url = buildUrl(config, city, state);
-    return fetch(url)
-  };
-
-// dynamically create divs after hitting search
-  function buildInfo(){
-
-      $("input[type=submit]").click(function(){
-        $("<li />").html("item").appendTo(".results");
-      })
+    const url = buildUrl(config, city, state)
+    return fetch(url).then(function(response){
+      return response.json();
+    });
   };
   // ===
 
-  //1. build object
-  const objWeWant ={
-    name: 'Venue',
-    photos: []
+
+  // get venue name
+  function getVenueNames (data) {
+    const venueWrapperList = data.response.groups[0].items
+    return venueWrapperList
+             .map(venueWrapper => venueWrapper.venue)
+             .map(venue => venue.name)
+  }
+
+  // get venue ratings
+  function getVenueNames (data) {
+    const venueWrapperList = data.response.groups[0].items
+    return venueWrapperList
+             .map(venueWrapper => venueWrapper.venue)
+             .map(venue => venue.rating)
   }
 
 
+  //store JSON object response in a variable
+  var data = doAjax(config, city, state);
+
   // 0. venue ids :: take response -> [venueIds]
+  // get venue ID
   function getVenueIds (data) {
     console.log(data.response)
     const venueWrapperList = data.response.groups[0].items
@@ -84,20 +97,31 @@ $(document).ready(function () {
              .map(venue => venue.id)
   }
 
+
+
+
+  var venueId = getVenueIds(data)
+
+  function buildPhotoUrl (venueId) {
+    const {base_url, endpoint, client_id, client_secret, version} = config
+    return photoURL = venueId
+              .map(urls => `${base_url}/${endpoint}/${venueId}/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`)
+  }
+
+  // API call #2
   // 1. Build functions to request photos for a venue
   function requestPhotos(url) {
     // 2. Use map to turn list of venue ids into a list of urls to request
-    venueIds.map(builPhotoUrl).map(url => fetch(url)).map(promise => {
+    venueIds.map(builPhotoUrl).map(url => fetch(url)).map(promise => function(response){return response.json()}).map(
       // pluck off photo information
       // get photo urls
       // build HTML
-    })
+    )
+
+
   }
 
-  function buildPhotoUrl (venueId) {
-    const { base_url, endpoint, client_id, client_secret, version, venueId = getVenueIds()} = config
-    return `${base_url}/${endpoint}/${venueId}/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`
-  }
+
 
 
 });
