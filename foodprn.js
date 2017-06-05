@@ -78,7 +78,6 @@ $(document).ready(function () {
   // 0. venue ids :: take response -> [venueIds]
   // get venue ID
   function getVenueIds (data) {
-    console.log(data.response)
     const venueWrapperList = data.response.groups[0].items
     return venueWrapperList
              .map(venueWrapper => venueWrapper.venue)
@@ -90,20 +89,22 @@ $(document).ready(function () {
   function buildPhotoUrl (venueId) {
     const {base_url, endpoint, client_id, client_secret, version} = config
     return photoURL = venueId
-              .map(urls => `${base_url}/${endpoint}/'+venueId +'/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`)
+              .map(urls => `${base_url}/${endpoint}/'+ venueId +'/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`)
   }
 
+  var urls = buildPhotoUrl(venueId)
   // API call #2
   // 1. Build functions to request photos for a venue
-  function requestPhotos(url) {
-    // 2. Use map to turn list of venue ids into a list of urls to request
-    venueIds.map(builPhotoUrl).map(url => fetch(url)).map(promise => function(response){return response.json()}).map(
-      // pluck off photo information
-      // get photo urls
-      // build HTML
+  function requestPhotos(urls) {
+    return venueIds.map(builPhotoUrl).map(urls => fetch(url)).map(promise => function(response){return response.json()})
+    // pluck off photo information
+    // get photo urls
+    // build HTML
     )
 
-
+  var photos = requestPhotos(urls)
+  function getPhotoInfo ()
+    const photoList = urls.response.photos[1].items
   }
 
   //build array of objects
