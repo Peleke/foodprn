@@ -10,9 +10,6 @@ $(document).ready(function () {
     // do your state/ui updates herej
     $(".wellDivContainer").append()
     // 2. Dump that into a <pre></pre> tag on the page w/ JSON.stringify(mappedData, null, 4)
-
-
-
   })
 
   // ===
@@ -56,62 +53,56 @@ $(document).ready(function () {
     });
   };
   // ===
+
+  //Build object we want with relevant information
+  const objWeWant ={}
+
   //store JSON object response in a variable
-  var data = doAjax(config, city, state);
-
-  // get venue name
-  function getVenueNames (data) {
+  var data = doAjax(config, city, state)
+  //Get venue name and rating and push to objWeWant
+  function getVenueInfo (data) {
     const venueWrapperList = data.response.groups[0].items
     return venueWrapperList
              .map(venueWrapper => venueWrapper.venue)
-             .map(venue => venue.name)
+             .map(name => venue.name)
+             .map(rating => venue.rating)
+             .then(function(name, rating){
+               objWeWant.push(name, rating);
+             })
   }
-
-  // get venue ratings
-  function getVenueNames (data) {
-    const venueWrapperList = data.response.groups[0].items
-    return venueWrapperList
-             .map(venueWrapper => venueWrapper.venue)
-             .map(venue => venue.rating)
-  }
-
   // 0. venue ids :: take response -> [venueIds]
   // get venue ID
-  function getVenueIds (data) {
+  function getVenueId (data) {
     const venueWrapperList = data.response.groups[0].items
     return venueWrapperList
              .map(venueWrapper => venueWrapper.venue)
              .map(venue => venue.id)
   }
   //store JSON object response in a variable
-  var venueId = getVenueIds(data)
+  var venueId = getVenueId(data)
 
+  // Build function that puts together correct URL for 'photos' endpoint
   function buildPhotoUrl (venueId) {
     const {base_url, endpoint, client_id, client_secret, version} = config
     return photoURL = venueId
               .map(urls => `${base_url}/${endpoint}/'+ venueId +'/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`)
   }
-
-  var urls = buildPhotoUrl(venueId)
   // API call #2
-  // 1. Build functions to request photos for a venue
+  var urls = buildPhotoUrl(venueId)
+  // Build function to make 2nd API call to 'photos' URL
   function requestPhotos(urls) {
-    return venueIds.map(builPhotoUrl).map(urls => fetch(url)).map(promise => function(response){return response.json()})
-    // pluck off photo information
-    // get photo urls
-    // build HTML
-    )
-
-  var photos = requestPhotos(urls)
-  function getPhotoInfo ()
     const photoList = urls.response.photos[1].items
+    return venueIds
+            .map(builPhotoUrl)
+            .map(urls => fetch(url))
+            // pluck off photo information
+            .map(promise => function(response){return response.json()})
+            // get photo urls
+            .map(photoUrls => response.prefix, response.suffix)
+            // build HTML
+            .then(function(response){
+              return
+            })
   }
-
-  //build array of objects
-  const objWeWant ={
-    name: 'Venue',
-    photos: []
-  }
-
 
 });
