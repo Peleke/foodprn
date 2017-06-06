@@ -5,10 +5,19 @@ $(document).ready(function () {
 
     const city =$("#city").val().trim(); // grab city from input
     const state = $("#state").val().trim();// grab stae from input
-    doAjax(config, city, state);
+    doAjax(config, city, state)
+      .then(getVenueInfo)
+      .then(function (info) {
+        return info.map(venue => venue.id)
+      })
+      .then(buildPhotoUrl)
+      .then(requestPhotos)
+      // Also puts shit on page
+      .then(getPhotoUrls)
+      .catch(console.error)
 
     // do your state/ui updates herej
-    $(".wellDivContainer").append()
+
     // 2. Dump that into a <pre></pre> tag on the page w/ JSON.stringify(mappedData, null, 4)
   })
 
@@ -54,22 +63,18 @@ $(document).ready(function () {
   };
   // ===
 
-  //Build object we want with relevant information
-  const objWeWant ={}
 
   //store JSON object response in a variable
   var data = doAjax(config, city, state)
   //Get venue name and rating and push to objWeWant
   function getVenueInfo (data) {
-    const venueWrapperList = data.response.groups[0].items
-    return venueWrapperList
-             .map(venueWrapper => venueWrapper.venue)
-             .map(name => venue.name)
-             .map(rating => venue.rating)
-             .then(function(name, rating){
-               objWeWant.push(name, rating);
-             })
-  }
+   const venueWrapperList = data.response.groups[0].items
+   return venueWrapperList
+            .map(venueWrapper => venueWrapper.venue)
+            .map(venue => {
+              return { name: venue.name, rating: venue.rating}
+            })
+ }
   // 0. venue ids :: take response -> [venueIds]
   // get venue ID
   function getVenueId (data) {
@@ -85,24 +90,39 @@ $(document).ready(function () {
   function buildPhotoUrl (venueId) {
     const {base_url, endpoint, client_id, client_secret, version} = config
     return photoURL = venueId
-              .map(urls => `${base_url}/${endpoint}/'+ venueId +'/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`)
+              .map(venueId => `${base_url}/${endpoint}/'+ ${venueId} +'/photos?client_id=${client_id}&client_secret=${client_secret}&v=${version}`)
   }
   // API call #2
   var urls = buildPhotoUrl(venueId)
+
+
   // Build function to make 2nd API call to 'photos' URL
   function requestPhotos(urls) {
-    const photoList = urls.response.photos[1].items
-    return venueIds
-            .map(builPhotoUrl)
-            .map(urls => fetch(url))
-            // pluck off photo information
-            .map(promise => function(response){return response.json()})
-            // get photo urls
-            .map(photoUrls => response.prefix, response.suffix)
-            // build HTML
-            .then(function(response){
-              return
-            })
+  // const photoList = urls.response.photos[1].items
+  return urls
+          .map(url => fetch(url))
+          // pluck off photo information
+          .map(promise =>
+            promise
+              .then(response => response.json()
+           ))
   }
+
+  var photoPromises = requestPhotos(urls);
+
+  function getPhotoUrls (photoPromises) {
+    photoPromises
+      .map(promise => promise.json()).then(photo => {
+          // Use this to figure out which properties to pull off
+          const url = photo.prefix + photo.suffix
+          return url
+        }).then((photoUrls) => {
+          // use urls to build images for page or whatever
+          photoUrls.forEach((url) => {
+            // replace with your HTML/jQuery logic :)
+            $(".wellDivContainer").append()
+          })
+        })
+     }
 
 });
